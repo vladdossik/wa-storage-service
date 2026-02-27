@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13.02.2026_001_create_timescaledb_extension
+      author: givan3819@gmail.com
+      changes:
+        - sql:
+            sql: "CREATE EXTENSION IF NOT EXISTS timescaledb SCHEMA public;"

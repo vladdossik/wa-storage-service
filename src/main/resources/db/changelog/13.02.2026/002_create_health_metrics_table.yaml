@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13.02.2026_002_create_health_metrics
+      author: givan3819@gmail.com
+      changes:
+        - createTable:
+            tableName: health_metrics
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: timestamp
+                  type: TIMESTAMPTZ
+                  constraints:
+                    nullable: false
+              - column:
+                  name: heart_rate
+                  type: INTEGER
+              - column:
+                  name: steps
+                  type: INTEGER
+              - column:
+                  name: sleep_hours
+                  type: DOUBLE PRECISION
+              - column:
+                  name: metadata
+                  type: JSONB
+        - addPrimaryKey:
+            tableName: health_metrics
+            columnNames: id, timestamp
+            constraintName: pk_health_metrics
