@@ -18,7 +18,6 @@ import org.wa.storage.service.util.EventUnitConverter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,6 +29,7 @@ public class UserActivityServiceImpl implements UserActivityService {
     private final EventUnitConverter unitConverter;
     private final AggregatedActivityMapper aggregatedActivityMapper;
 
+    @Override
     @Transactional
     public UserActivityResponseDto createUserActivity(String userId, UserActivityCreateDto dto) {
         EventType eventType = EventType.valueOf(dto.getEventType());
@@ -47,12 +47,14 @@ public class UserActivityServiceImpl implements UserActivityService {
         return activityMapper.toDto(savedActivity);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<UserActivityResponseDto> getActivities(String userId, OffsetDateTime from, OffsetDateTime to) {
         return activitiesRepository.findByUserIdAndTimestampBetweenOrderByTimestampAsc(userId, from, to)
-                .stream().map(activityMapper::toDto).collect(Collectors.toList());
+                .stream().map(activityMapper::toDto).toList();
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<AggregatedActivityDto> getAggregatedActivities(
             String userId, OffsetDateTime from, OffsetDateTime to, String bucket) {
@@ -60,11 +62,12 @@ public class UserActivityServiceImpl implements UserActivityService {
         return aggregatedActivityMapper.toDtoList(results);
     }
 
+    @Override
     @Transactional
     public void deleteUserActivity(String userId, Long activityId) {
-        if (!activitiesRepository.existsByIdAndUserId(activityId, userId)) {
+        int deleted = activitiesRepository.deleteByIdAndUserId(activityId, userId);
+        if (deleted == 0) {
             throw new ActivityNotFoundException("Запись не найдена или не пренадлежит пользователю");
         }
-        activitiesRepository.deleteByIdAndUserId(activityId, userId);
     }
 }

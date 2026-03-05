@@ -2,6 +2,7 @@ package org.wa.storage.service.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.wa.storage.service.dto.AggregatedActivityDto;
 import org.wa.storage.service.dto.AggregatedMetricDto;
 import org.wa.storage.service.dto.CombinedDashboardDto;
@@ -21,6 +22,8 @@ public class DashboardServiceImpl implements DashboardService {
     private final UserActivityService userActivityService;
     private final DashboardMapper dashboardMapper;
 
+    @Override
+    @Transactional
     public CombinedDashboardDto getAggregatedData(String userId, OffsetDateTime from, OffsetDateTime to, String bucket) {
         List<AggregatedMetricDto> metrics = healthMetricsService.getAggregatedMetrics(userId, from, to, bucket);
         List<AggregatedActivityDto> activities = userActivityService.getAggregatedActivities(userId, from, to, bucket);

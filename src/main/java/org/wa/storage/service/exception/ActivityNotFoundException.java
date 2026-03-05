@@ -1,8 +1,6 @@
 package org.wa.storage.service.exception;
 
-import org.apache.kafka.common.errors.ResourceNotFoundException;
-
-public class ActivityNotFoundException extends ResourceNotFoundException {
+public class ActivityNotFoundException extends RuntimeException {
     public ActivityNotFoundException(String message) {
         super(message);
     }

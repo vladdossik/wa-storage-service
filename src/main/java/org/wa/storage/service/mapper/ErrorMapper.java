@@ -3,7 +3,7 @@ package org.wa.storage.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.http.HttpStatus;
-import org.wa.storage.service.model.ErrorResponse;
+import org.wa.storage.service.dto.ErrorResponse;
 
 import java.time.LocalDateTime;
 

@@ -13,7 +13,6 @@ import org.wa.storage.service.service.HealthMetricsService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,23 +23,32 @@ public class HealthMetricsServiceImpl implements HealthMetricsService {
     private final HealthMetricMapper metricMapper;
     private final AggregatedMetricMapper aggregatedMetricMapper;
 
+    @Override
     @Transactional
     public void saveMetricFromDto(HealthMetricDto dto) {
+        if (metricsRepository.existsByUserIdAndTimestamp(dto.getUserId(), dto.getTimestamp())) {
+            log.warn("Метрика уже существует: userId={}, timestamp={}", dto.getUserId(), dto.getTimestamp());
+            return;
+        }
         HealthMetric metric = metricMapper.toEntity(dto);
         metricsRepository.save(metric);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<HealthMetricResponseDto> getMetrics(String userId, OffsetDateTime from, OffsetDateTime to) {
         return metricsRepository.findByUserIdAndTimestampBetweenOrderByTimestampAsc(userId, from, to)
                 .stream()
                 .map(metricMapper::toResponseDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<AggregatedMetricDto> getAggregatedMetrics(String userId, OffsetDateTime from, OffsetDateTime to, String bucket) {
-        List<Object[]> results = metricsRepository.findAggregatedMetricsNative(userId, from, to, bucket);
+    public List<AggregatedMetricDto> getAggregatedMetrics(
+            String userId, OffsetDateTime from, OffsetDateTime to, String bucket) {
+        List<AggregatedMetricProjection> results = metricsRepository
+                .findAggregatedMetricsNative(userId, from, to, bucket);
         return aggregatedMetricMapper.toDtoList(results);
     }
 }

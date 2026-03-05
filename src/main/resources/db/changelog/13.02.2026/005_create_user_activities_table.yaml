@@ -26,7 +26,7 @@ databaseChangeLog:
                   name: timestamp
                   type: TIMESTAMPTZ
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: raw_quantity
                   type: FLOAT8

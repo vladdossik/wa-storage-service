@@ -1,8 +1,10 @@
 package org.wa.storage.service.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.wa.storage.service.dto.AggregatedActivityDto;
 import org.wa.storage.service.enums.EventType;
+import org.wa.storage.service.util.DoubleValueConverter;
 
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
@@ -10,10 +12,13 @@ import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class AggregatedActivityMapper {
+
+    private final DoubleValueConverter converter;
+
     public AggregatedActivityDto toDto(Object[] row) {
         if (row == null || row.length < 7) {
             return null;
@@ -26,7 +31,7 @@ public class AggregatedActivityMapper {
                 unit,
                 ((Number) row[2]).longValue(),
                 row[3] != null ? ((Number) row[3]).intValue() : null,
-                row[4] != null ? ((Number) row[4]).doubleValue() : null,
+                converter.roundToTwoDecimals(row[4] != null ? ((Number) row[4]).doubleValue() : null),
                 row[5] != null ? ((Number) row[5]).intValue() : null,
                 row[6] != null ? ((Number) row[6]).intValue() : null
         );
@@ -48,7 +53,7 @@ public class AggregatedActivityMapper {
         return rows.stream()
                 .map(this::toDto)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private static OffsetDateTime toOffsetDateTime(Object value) {

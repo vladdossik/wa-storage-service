@@ -16,3 +16,5 @@ databaseChangeLog:
         db/changelog/13.02.2026/005_create_user_activities_table.yaml
   - include:
       file: db/changelog/13.02.2026/006_create_user_activities_indexes.yaml
+  - include:
+      file: db/changelog/13.02.2026/007_convert_user_activities_hypertable.yaml

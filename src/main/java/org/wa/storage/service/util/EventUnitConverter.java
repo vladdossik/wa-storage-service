@@ -3,25 +3,21 @@ package org.wa.storage.service.util;
 import org.springframework.stereotype.Component;
 import org.wa.storage.service.enums.EventType;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Component
 public class EventUnitConverter {
-    private static final Map<String, Integer> FACTORS = new HashMap<>();
-
-    static {
-        FACTORS.put("min", 1);
-        FACTORS.put("h", 60);
-        FACTORS.put("d", 1440);
-        FACTORS.put("mg", 1);
-        FACTORS.put("g", 1000);
-        FACTORS.put("kg", 1000000);
-        FACTORS.put("ml", 1);
-        FACTORS.put("l", 1000);
-        FACTORS.put("mark", 1);
-    }
+    private static final Map<String, Integer> FACTORS = Map.of(
+            "min", 1,
+            "h", 60,
+            "d", 1440,
+            "mg", 1,
+            "g", 1000,
+            "kg", 1000000,
+            "ml", 1,
+            "l", 1000,
+            "mark", 1
+    );
 
     public int convertToBase(double rawValue, String unit, EventType eventType) {
         if (!eventType.getAllowedUnits().contains(unit)) {

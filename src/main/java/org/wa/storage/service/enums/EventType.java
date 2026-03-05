@@ -1,7 +1,10 @@
 package org.wa.storage.service.enums;
 
 import lombok.Getter;
+import org.wa.storage.service.dto.EventTypeInfoDto;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -50,5 +53,23 @@ public enum EventType {
             throw new UnsupportedOperationException("This event type does not have a value range");
         }
         return maxValue;
+    }
+
+    public EventTypeInfoDto toInfoDto() {
+        return new EventTypeInfoDto(
+                name(),
+                getAllowedUnits(),
+                getBaseUnit(),
+                hasValueRange(),
+                hasValueRange() ? getMinValue() : null,
+                hasValueRange() ? getMaxValue() : null
+        );
+    }
+
+    private static final List<EventTypeInfoDto> ALL_AS_INFO =
+            Arrays.stream(values()).map(EventType::toInfoDto).toList();
+
+    public static List<EventTypeInfoDto> getAllAsInfo() {
+        return ALL_AS_INFO;
     }
 }

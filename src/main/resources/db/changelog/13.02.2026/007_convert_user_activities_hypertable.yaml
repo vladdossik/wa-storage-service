@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13.02.2026_007_convert_user_activities_hypertable
+      author: givan3819@gmail.com
+      changes:
+        - sql:
+            sql: "SELECT create_hypertable('user_activities', 'timestamp', if_not_exists => TRUE, migrate_data => TRUE);"

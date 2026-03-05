@@ -1,14 +1,14 @@
 package org.wa.storage.service.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.consumer.Consumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.KafkaOperations;
 import org.springframework.kafka.listener.CommonErrorHandler;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.lang.NonNull;
 import org.springframework.util.backoff.FixedBackOff;
@@ -17,27 +17,21 @@ import org.springframework.util.backoff.FixedBackOff;
 @Configuration
 public class KafkaConfig {
 
-    @Value("${health.topics.validated}")
-    private String validatedDataTopic;
+    @Value("${health.kafka.retry-interval-ms}")
+    private long retryIntervalMs;
+
+    @Value("${health.kafka.max-retries}")
+    private long maxRetries;
 
     @Bean
-    public NewTopic validatedTopic() {
-        return new NewTopic(validatedDataTopic, 1, (short) 1);
-    }
-
-    @Bean
-    public CommonErrorHandler kafkaErrorHandler() {
-        return new DefaultErrorHandler(new FixedBackOff(0L, 0L)) {
-            @Override
-            public void handleOtherException(
-                    @NonNull Exception thrownException,
-                    @NonNull Consumer<?, ?> consumer,
-                    @NonNull org.springframework.kafka.listener.MessageListenerContainer container,
-                    boolean batchListener) {
-                log.error("Error processing message, skipping: {}", thrownException.getMessage());
-                super.handleOtherException(thrownException, consumer, container, batchListener);
-            }
-        };
+    public CommonErrorHandler kafkaErrorHandler(KafkaOperations<String, Object> kafkaTemplate) {
+        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate);
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler(
+                recoverer, new FixedBackOff(retryIntervalMs, maxRetries));
+        errorHandler.setRetryListeners((record, ex, deliveryAttempt) ->
+                log.warn("Retry attempt {} for topic={} partition={} offset={}",
+                        deliveryAttempt, record.topic(), record.partition(), record.offset(), ex));
+        return errorHandler;
     }
 
     @Bean

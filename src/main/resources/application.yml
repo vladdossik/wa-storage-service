@@ -23,6 +23,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           batch_size: 20
+        order_inserts: true
+        order_updates: true
     show-sql: true
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
@@ -30,6 +32,10 @@ spring:
 health:
   topics:
     validated: health.validated
+    dlq: health.storage.dlq
+  kafka:
+    retry-interval-ms: ${KAFKA_RETRY_INTERVAL_MS}
+    max-retries: ${KAFKA_MAX_RETRIES}
 
 jwt:
   secret:

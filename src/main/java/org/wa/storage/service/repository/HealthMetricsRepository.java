@@ -4,13 +4,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.wa.storage.service.dto.AggregatedMetricProjection;
 import org.wa.storage.service.model.HealthMetric;
+import org.wa.storage.service.model.HealthMetricId;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
-public interface HealthMetricsRepository extends JpaRepository<HealthMetric, Long> {
+public interface HealthMetricsRepository extends JpaRepository<HealthMetric, HealthMetricId> {
+    boolean existsByUserIdAndTimestamp(String userId, OffsetDateTime timestamp);
+
     List<HealthMetric> findByUserIdAndTimestampBetweenOrderByTimestampAsc(
             String userId, OffsetDateTime start, OffsetDateTime end);
 
@@ -27,7 +31,7 @@ public interface HealthMetricsRepository extends JpaRepository<HealthMetric, Lon
             GROUP BY bucket
             ORDER BY bucket
             """, nativeQuery = true)
-    List<Object[]> findAggregatedMetricsNative(
+    List<AggregatedMetricProjection> findAggregatedMetricsNative(
             @Param("userId") String userId,
             @Param("start") OffsetDateTime start,
             @Param("end") OffsetDateTime end,

@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.wa.storage.service.dto.CombinedDashboardDto;
+import org.wa.storage.service.enums.Bucket;
 import org.wa.storage.service.service.DashboardService;
 
 import java.time.OffsetDateTime;
 
 @RestController
-@RequestMapping("v1/users/{userId}/dashboard")
+@RequestMapping("/v1/users/{userId}/dashboard")
 @RequiredArgsConstructor
 public class DashboardController {
     private final DashboardService dashboardService;
@@ -23,7 +24,7 @@ public class DashboardController {
             @PathVariable String userId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
-            @RequestParam(defaultValue = "1 day") String bucket) {
-        return dashboardService.getAggregatedData(userId, from, to, bucket);
+            @RequestParam(defaultValue = "DAY") Bucket bucket) {
+        return dashboardService.getAggregatedData(userId, from, to, bucket.getValue());
     }
 }
