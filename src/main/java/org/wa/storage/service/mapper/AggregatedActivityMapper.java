@@ -3,7 +3,8 @@ package org.wa.storage.service.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.wa.storage.service.dto.AggregatedActivityDto;
-import org.wa.storage.service.enums.EventType;
+import org.wa.storage.service.dto.AggregatedActivityProjection;
+import org.wa.storage.service.enumeration.EventType;
 import org.wa.storage.service.util.DoubleValueConverter;
 
 import java.sql.Timestamp;
@@ -19,21 +20,19 @@ public class AggregatedActivityMapper {
 
     private final DoubleValueConverter converter;
 
-    public AggregatedActivityDto toDto(Object[] row) {
-        if (row == null || row.length < 7) {
+    public AggregatedActivityDto toDto(AggregatedActivityProjection projection) {
+        if (projection == null) {
             return null;
         }
-        String eventTypeStr = (String) row[1];
-        String unit = toUnit(eventTypeStr);
         return new AggregatedActivityDto(
-                toOffsetDateTime(row[0]),
-                eventTypeStr,
-                unit,
-                ((Number) row[2]).longValue(),
-                row[3] != null ? ((Number) row[3]).intValue() : null,
-                converter.roundToTwoDecimals(row[4] != null ? ((Number) row[4]).doubleValue() : null),
-                row[5] != null ? ((Number) row[5]).intValue() : null,
-                row[6] != null ? ((Number) row[6]).intValue() : null
+                toOffsetDateTime(projection.getBucket()),
+                projection.getEventType(),
+                toUnit(projection.getEventType()),
+                projection.getEventCount(),
+                projection.getTotalQuantity(),
+                converter.roundToTwoDecimals(projection.getAvgQuantity()),
+                projection.getMinQuantity(),
+                projection.getMaxQuantity()
         );
     }
 
@@ -46,18 +45,17 @@ public class AggregatedActivityMapper {
         }
     }
 
-    public List<AggregatedActivityDto> toDtoList(List<Object[]> rows) {
-        if (rows == null) {
+    public List<AggregatedActivityDto> toDtoList(List<AggregatedActivityProjection> projections) {
+        if (projections == null) {
             return Collections.emptyList();
         }
-        return rows.stream()
+        return projections.stream()
                 .map(this::toDto)
                 .filter(Objects::nonNull)
                 .toList();
     }
 
     private static OffsetDateTime toOffsetDateTime(Object value) {
-        if (value == null) return null;
         if (value instanceof OffsetDateTime) return (OffsetDateTime) value;
         if (value instanceof java.time.Instant i) return OffsetDateTime.ofInstant(i, ZoneOffset.UTC);
         if (value instanceof Timestamp ts) return ts.toInstant().atOffset(ZoneOffset.UTC);

@@ -6,6 +6,9 @@ import org.wa.storage.service.dto.AggregatedMetricDto;
 import org.wa.storage.service.dto.AggregatedMetricProjection;
 import org.wa.storage.service.util.DoubleValueConverter;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +23,7 @@ public class AggregatedMetricMapper {
             return null;
         }
         return new AggregatedMetricDto(
-                projection.getBucket(),
+                toOffsetDateTime(projection.getBucket()),
                 converter.roundToTwoDecimals(projection.getAvgHeartRate()),
                 projection.getMaxHeartRate(),
                 converter.roundToTwoDecimals(projection.getAvgSteps()),
@@ -37,5 +40,9 @@ public class AggregatedMetricMapper {
                 .map(this::toDto)
                 .filter(Objects::nonNull)
                 .toList();
+    }
+
+    private OffsetDateTime toOffsetDateTime(Instant instant) {
+        return instant != null ? instant.atOffset(ZoneOffset.UTC) : null;
     }
 }

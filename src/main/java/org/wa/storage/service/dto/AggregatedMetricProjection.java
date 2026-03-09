@@ -1,9 +1,9 @@
 package org.wa.storage.service.dto;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 public interface AggregatedMetricProjection {
-    OffsetDateTime getBucket();
+    Instant getBucket();
     Double getAvgHeartRate();
     Integer getMaxHeartRate();
     Double getAvgSteps();

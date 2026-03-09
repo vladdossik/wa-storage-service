@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 13.02.2026_003_convert_to_hypertable
+      id: 13.02.2026_004_convert_to_hypertable
       author: givan3819@gmail.com
       changes:
         - sql:

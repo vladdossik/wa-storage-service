@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 13.02.2026_006_create_user_activities_indexes
+      id: 13.02.2026_008_create_user_activities_indexes
       author: givan3819@gmail.com
       changes:
         - createIndex:

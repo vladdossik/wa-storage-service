@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 13.02.2026_004_create_health_metrics_indexes
+      id: 13.02.2026_005_create_health_metrics_indexes
       author: givan3819@gmail.com
       changes:
         - createIndex:

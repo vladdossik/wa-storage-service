@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.wa.storage.service.dto.AggregatedActivityDto;
 import org.wa.storage.service.dto.UserActivityCreateDto;
 import org.wa.storage.service.dto.UserActivityResponseDto;
+import org.wa.storage.service.enumeration.Bucket;
 import org.wa.storage.service.service.UserActivityService;
 
 import java.time.OffsetDateTime;
@@ -47,7 +48,7 @@ public class UserActivityController {
             @PathVariable String userId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
-            @RequestParam(defaultValue = "1 day") String bucket) {
+            @RequestParam(defaultValue = "DAY") Bucket bucket) {
         return userActivityService.getAggregatedActivities(userId, from, to, bucket);
     }
 

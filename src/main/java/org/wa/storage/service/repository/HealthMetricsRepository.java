@@ -6,13 +6,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.wa.storage.service.dto.AggregatedMetricProjection;
 import org.wa.storage.service.model.HealthMetric;
-import org.wa.storage.service.model.HealthMetricId;
+import org.wa.storage.service.model.CustomPrimaryKey;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
-public interface HealthMetricsRepository extends JpaRepository<HealthMetric, HealthMetricId> {
+public interface HealthMetricsRepository extends JpaRepository<HealthMetric, CustomPrimaryKey> {
     boolean existsByUserIdAndTimestamp(String userId, OffsetDateTime timestamp);
 
     List<HealthMetric> findByUserIdAndTimestampBetweenOrderByTimestampAsc(

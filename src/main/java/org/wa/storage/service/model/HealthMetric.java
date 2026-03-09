@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +22,12 @@ import java.util.Map;
 @NoArgsConstructor
 @Entity
 @Table(name = "health_metrics")
-@IdClass(HealthMetricId.class)
+@IdClass(CustomPrimaryKey.class)
 public class HealthMetric {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "health_metrics_id_seq")
+    @SequenceGenerator(name = "health_metrics_id_seq", sequenceName = "health_metrics_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "user_id", nullable = false)

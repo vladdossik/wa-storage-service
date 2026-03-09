@@ -3,6 +3,7 @@ package org.wa.storage.service.service;
 import org.wa.storage.service.dto.AggregatedActivityDto;
 import org.wa.storage.service.dto.UserActivityCreateDto;
 import org.wa.storage.service.dto.UserActivityResponseDto;
+import org.wa.storage.service.enumeration.Bucket;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface UserActivityService {
     List<UserActivityResponseDto> getActivities(String userId, OffsetDateTime from, OffsetDateTime to);
 
     List<AggregatedActivityDto> getAggregatedActivities(String userId, OffsetDateTime from, OffsetDateTime to,
-                                                        String bucket);
+                                                        Bucket bucket);
 
     void deleteUserActivity(String userId, Long activityId);
 }

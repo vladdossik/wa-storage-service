@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13.02.2026_002_create_sequences
+      author: givan3819@gmail.com
+      changes:
+        - sql:
+            sql: "CREATE SEQUENCE IF NOT EXISTS health_metrics_id_seq START 1"
+        - sql:
+            sql: "CREATE SEQUENCE IF NOT EXISTS user_activities_id_seq START 1"

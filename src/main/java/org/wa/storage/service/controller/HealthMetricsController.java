@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.wa.storage.service.dto.AggregatedMetricDto;
 import org.wa.storage.service.dto.HealthMetricResponseDto;
+import org.wa.storage.service.enumeration.Bucket;
 import org.wa.storage.service.service.HealthMetricsService;
 
 import java.time.OffsetDateTime;
@@ -33,8 +34,7 @@ public class HealthMetricsController {
             @PathVariable String userId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
-            @RequestParam(defaultValue = "1 day") String bucket
-    ) {
+            @RequestParam(defaultValue = "DAY") Bucket bucket) {
         return metricsService.getAggregatedMetrics(userId, from, to, bucket);
     }
 

@@ -3,7 +3,7 @@ package org.wa.storage.service.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.wa.storage.service.dto.EventTypeInfoDto;
-import org.wa.storage.service.enums.EventType;
+import org.wa.storage.service.enumeration.EventType;
 import org.wa.storage.service.service.EventTypeService;
 
 import java.util.List;

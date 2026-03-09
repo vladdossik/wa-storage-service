@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wa.storage.service.dto.*;
+import org.wa.storage.service.dto.AggregatedMetricDto;
+import org.wa.storage.service.dto.AggregatedMetricProjection;
+import org.wa.storage.service.dto.HealthMetricDto;
+import org.wa.storage.service.dto.HealthMetricResponseDto;
+import org.wa.storage.service.enumeration.Bucket;
 import org.wa.storage.service.mapper.AggregatedMetricMapper;
 import org.wa.storage.service.mapper.HealthMetricMapper;
 import org.wa.storage.service.model.HealthMetric;
@@ -46,9 +50,9 @@ public class HealthMetricsServiceImpl implements HealthMetricsService {
     @Override
     @Transactional(readOnly = true)
     public List<AggregatedMetricDto> getAggregatedMetrics(
-            String userId, OffsetDateTime from, OffsetDateTime to, String bucket) {
+            String userId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
         List<AggregatedMetricProjection> results = metricsRepository
-                .findAggregatedMetricsNative(userId, from, to, bucket);
+                .findAggregatedMetricsNative(userId, from, to, bucket.getValue());
         return aggregatedMetricMapper.toDtoList(results);
     }
 }

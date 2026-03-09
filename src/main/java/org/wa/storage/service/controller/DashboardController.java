@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.wa.storage.service.dto.CombinedDashboardDto;
-import org.wa.storage.service.enums.Bucket;
+import org.wa.storage.service.enumeration.Bucket;
 import org.wa.storage.service.service.DashboardService;
 
 import java.time.OffsetDateTime;
@@ -25,6 +25,6 @@ public class DashboardController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
             @RequestParam(defaultValue = "DAY") Bucket bucket) {
-        return dashboardService.getAggregatedData(userId, from, to, bucket.getValue());
+        return dashboardService.getAggregatedData(userId, from, to, bucket);
     }
 }

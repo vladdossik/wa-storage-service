@@ -1,7 +1,7 @@
 package org.wa.storage.service.util;
 
 import org.springframework.stereotype.Component;
-import org.wa.storage.service.enums.EventType;
+import org.wa.storage.service.enumeration.EventType;
 
 import java.util.Map;
 

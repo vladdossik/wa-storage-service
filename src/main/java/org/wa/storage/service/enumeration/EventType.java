@@ -1,4 +1,4 @@
-package org.wa.storage.service.enums;
+package org.wa.storage.service.enumeration;
 
 import lombok.Getter;
 import org.wa.storage.service.dto.EventTypeInfoDto;

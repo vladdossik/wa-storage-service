@@ -8,6 +8,7 @@ import org.wa.storage.service.dto.AggregatedMetricDto;
 import org.wa.storage.service.dto.CombinedDashboardDto;
 import org.wa.storage.service.mapper.DashboardMapper;
 import org.wa.storage.service.service.DashboardService;
+import org.wa.storage.service.enumeration.Bucket;
 import org.wa.storage.service.service.HealthMetricsService;
 import org.wa.storage.service.service.UserActivityService;
 
@@ -24,7 +25,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional
-    public CombinedDashboardDto getAggregatedData(String userId, OffsetDateTime from, OffsetDateTime to, String bucket) {
+    public CombinedDashboardDto getAggregatedData(String userId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
         List<AggregatedMetricDto> metrics = healthMetricsService.getAggregatedMetrics(userId, from, to, bucket);
         List<AggregatedActivityDto> activities = userActivityService.getAggregatedActivities(userId, from, to, bucket);
         return dashboardMapper.toDto(metrics, activities);

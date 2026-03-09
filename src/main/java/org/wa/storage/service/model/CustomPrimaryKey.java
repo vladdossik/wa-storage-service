@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class HealthMetricId implements Serializable {
+public class CustomPrimaryKey implements Serializable {
 
     private Long id;
     private OffsetDateTime timestamp;

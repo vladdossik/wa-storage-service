@@ -5,13 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wa.storage.service.dto.AggregatedActivityDto;
+import org.wa.storage.service.dto.AggregatedActivityProjection;
 import org.wa.storage.service.dto.UserActivityCreateDto;
 import org.wa.storage.service.dto.UserActivityResponseDto;
-import org.wa.storage.service.enums.EventType;
+import org.wa.storage.service.enumeration.EventType;
 import org.wa.storage.service.exception.ActivityNotFoundException;
 import org.wa.storage.service.mapper.AggregatedActivityMapper;
 import org.wa.storage.service.mapper.UserActivityMapper;
 import org.wa.storage.service.model.UserActivity;
+import org.wa.storage.service.enumeration.Bucket;
 import org.wa.storage.service.repository.UserActivitiesRepository;
 import org.wa.storage.service.service.UserActivityService;
 import org.wa.storage.service.util.EventUnitConverter;
@@ -57,8 +59,8 @@ public class UserActivityServiceImpl implements UserActivityService {
     @Override
     @Transactional(readOnly = true)
     public List<AggregatedActivityDto> getAggregatedActivities(
-            String userId, OffsetDateTime from, OffsetDateTime to, String bucket) {
-        List<Object[]> results = activitiesRepository.findAggregatedActivitiesNative(userId, from, to, bucket);
+            String userId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
+        List<AggregatedActivityProjection> results = activitiesRepository.findAggregatedActivitiesNative(userId, from, to, bucket.getValue());
         return aggregatedActivityMapper.toDtoList(results);
     }
 
