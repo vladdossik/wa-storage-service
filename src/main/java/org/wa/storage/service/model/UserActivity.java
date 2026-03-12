@@ -32,8 +32,8 @@ public class UserActivity {
     @SequenceGenerator(name = "user_activities_id_seq", sequenceName = "user_activities_id_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    @Column(name = "external_id", nullable = false)
+    private String externalId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "event_type", nullable = false)

@@ -8,7 +8,7 @@ databaseChangeLog:
             tableName: health_metrics
             columns:
               - column:
-                  name: user_id
+                  name: external_id
               - column:
                   name: timestamp
                   descending: true

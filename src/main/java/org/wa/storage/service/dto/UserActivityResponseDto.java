@@ -8,7 +8,7 @@ import java.util.Map;
 @Data
 public class UserActivityResponseDto {
     private Long id;
-    private String userId;
+    private String externalId;
     private String eventType;
     private OffsetDateTime timestamp;
     private Double rawQuantity;

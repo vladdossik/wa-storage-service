@@ -16,8 +16,8 @@ public class HealthValidatedListener {
 
     @KafkaListener(topics = "${health.topics.validated}", groupId = "${spring.kafka.consumer.group-id}", concurrency = "3")
     public void receiveMetrics(HealthMetricDto metricDto) {
-        log.info("Received metric from Kafka: userId={}, timestamp={}",
-                metricDto.getUserId(), metricDto.getTimestamp());
+        log.info("Received metric from Kafka: externalId={}, timestamp={}",
+                metricDto.getExternalId(), metricDto.getTimestamp());
         try {
             healthMetricsService.saveMetricFromDto(metricDto);
         } catch (Exception e) {

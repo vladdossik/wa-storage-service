@@ -8,7 +8,7 @@ import java.util.Map;
 @Data
 public class HealthMetricResponseDto {
     private Long id;
-    private String userId;
+    private String externalId;
     private OffsetDateTime timestamp;
     private Integer heartRate;
     private Integer steps;

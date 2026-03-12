@@ -14,12 +14,12 @@ import java.util.List;
 
 @Repository
 public interface UserActivitiesRepository extends JpaRepository<UserActivity, CustomPrimaryKey> {
-    List<UserActivity> findByUserIdAndTimestampBetweenOrderByTimestampAsc(
-            String userId, OffsetDateTime start, OffsetDateTime end);
+    List<UserActivity> findByExternalIdAndTimestampBetweenOrderByTimestampAsc(
+            String externalId, OffsetDateTime start, OffsetDateTime end);
 
     @Modifying
-    @Query("DELETE FROM UserActivity u WHERE u.id = :id AND u.userId = :userId")
-    int deleteByIdAndUserId(@Param("id") Long id, @Param("userId") String userId);
+    @Query("DELETE FROM UserActivity u WHERE u.id = :id AND u.externalId = :externalId")
+    int deleteByIdAndExternalId(@Param("id") Long id, @Param("externalId") String externalId);
 
     @Query(value = """
             SELECT
@@ -31,12 +31,12 @@ public interface UserActivitiesRepository extends JpaRepository<UserActivity, Cu
                 MIN(quantity) AS "minQuantity",
                 MAX(quantity) AS "maxQuantity"
             FROM user_activities
-            WHERE user_id = :userId AND timestamp BETWEEN :start AND :end
+            WHERE external_id = :externalId AND timestamp BETWEEN :start AND :end
             GROUP BY bucket, event_type
             ORDER BY bucket, event_type
             """, nativeQuery = true)
     List<AggregatedActivityProjection> findAggregatedActivitiesNative(
-            @Param("userId") String userId,
+            @Param("externalId") String externalId,
             @Param("start") OffsetDateTime start,
             @Param("end") OffsetDateTime end,
             @Param("bucket") String bucket

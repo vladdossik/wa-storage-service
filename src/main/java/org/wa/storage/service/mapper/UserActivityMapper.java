@@ -9,7 +9,7 @@ import org.wa.storage.service.model.UserActivity;
 @Mapper(componentModel = "spring")
 public interface UserActivityMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "externalId", ignore = true)
     @Mapping(target = "quantity", ignore = true)
     UserActivity toEntity(UserActivityCreateDto dto);
 

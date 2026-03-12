@@ -30,8 +30,8 @@ public class HealthMetricsServiceImpl implements HealthMetricsService {
     @Override
     @Transactional
     public void saveMetricFromDto(HealthMetricDto dto) {
-        if (metricsRepository.existsByUserIdAndTimestamp(dto.getUserId(), dto.getTimestamp())) {
-            log.warn("Метрика уже существует: userId={}, timestamp={}", dto.getUserId(), dto.getTimestamp());
+        if (metricsRepository.existsByExternalIdAndTimestamp(dto.getExternalId(), dto.getTimestamp())) {
+            log.warn("Метрика уже существует: externalId={}, timestamp={}", dto.getExternalId(), dto.getTimestamp());
             return;
         }
         HealthMetric metric = metricMapper.toEntity(dto);
@@ -40,8 +40,8 @@ public class HealthMetricsServiceImpl implements HealthMetricsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<HealthMetricResponseDto> getMetrics(String userId, OffsetDateTime from, OffsetDateTime to) {
-        return metricsRepository.findByUserIdAndTimestampBetweenOrderByTimestampAsc(userId, from, to)
+    public List<HealthMetricResponseDto> getMetrics(String externalId, OffsetDateTime from, OffsetDateTime to) {
+        return metricsRepository.findByExternalIdAndTimestampBetweenOrderByTimestampAsc(externalId, from, to)
                 .stream()
                 .map(metricMapper::toResponseDto)
                 .toList();
@@ -50,9 +50,9 @@ public class HealthMetricsServiceImpl implements HealthMetricsService {
     @Override
     @Transactional(readOnly = true)
     public List<AggregatedMetricDto> getAggregatedMetrics(
-            String userId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
+            String externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
         List<AggregatedMetricProjection> results = metricsRepository
-                .findAggregatedMetricsNative(userId, from, to, bucket.getValue());
+                .findAggregatedMetricsNative(externalId, from, to, bucket.getValue());
         return aggregatedMetricMapper.toDtoList(results);
     }
 }

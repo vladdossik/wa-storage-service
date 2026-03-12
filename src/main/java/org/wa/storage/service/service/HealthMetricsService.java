@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface HealthMetricsService {
     void saveMetricFromDto(HealthMetricDto metricDto);
-    List<HealthMetricResponseDto> getMetrics(String userId, OffsetDateTime from, OffsetDateTime to);
-    List<AggregatedMetricDto> getAggregatedMetrics(String userId, OffsetDateTime from, OffsetDateTime to, Bucket bucket);
+    List<HealthMetricResponseDto> getMetrics(String externalId, OffsetDateTime from, OffsetDateTime to);
+    List<AggregatedMetricDto> getAggregatedMetrics(String externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket);
 }

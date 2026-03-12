@@ -25,9 +25,9 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional
-    public CombinedDashboardDto getAggregatedData(String userId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
-        List<AggregatedMetricDto> metrics = healthMetricsService.getAggregatedMetrics(userId, from, to, bucket);
-        List<AggregatedActivityDto> activities = userActivityService.getAggregatedActivities(userId, from, to, bucket);
+    public CombinedDashboardDto getAggregatedData(String externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
+        List<AggregatedMetricDto> metrics = healthMetricsService.getAggregatedMetrics(externalId, from, to, bucket);
+        List<AggregatedActivityDto> activities = userActivityService.getAggregatedActivities(externalId, from, to, bucket);
         return dashboardMapper.toDto(metrics, activities);
     }
 }

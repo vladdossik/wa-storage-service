@@ -30,8 +30,8 @@ public class HealthMetric {
     @SequenceGenerator(name = "health_metrics_id_seq", sequenceName = "health_metrics_id_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    @Column(name = "external_id", nullable = false)
+    private String externalId;
 
     @Id
     @Column(name = "timestamp", nullable = false)

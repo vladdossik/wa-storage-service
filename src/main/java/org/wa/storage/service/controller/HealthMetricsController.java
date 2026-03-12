@@ -16,26 +16,26 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/users/{userId}/metrics")
+@RequestMapping("/v1/users/{externalId}/metrics")
 @RequiredArgsConstructor
 public class HealthMetricsController {
     private final HealthMetricsService metricsService;
 
     @GetMapping
     public List<HealthMetricResponseDto> getMetrics(
-            @PathVariable String userId,
+            @PathVariable String externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to) {
-        return metricsService.getMetrics(userId, from, to);
+        return metricsService.getMetrics(externalId, from, to);
     }
 
     @GetMapping("/aggregated")
     public List<AggregatedMetricDto> getAggregatedMetrics(
-            @PathVariable String userId,
+            @PathVariable String externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
             @RequestParam(defaultValue = "DAY") Bucket bucket) {
-        return metricsService.getAggregatedMetrics(userId, from, to, bucket);
+        return metricsService.getAggregatedMetrics(externalId, from, to, bucket);
     }
 
 }

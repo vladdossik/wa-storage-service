@@ -14,17 +14,17 @@ import org.wa.storage.service.service.DashboardService;
 import java.time.OffsetDateTime;
 
 @RestController
-@RequestMapping("/v1/users/{userId}/dashboard")
+@RequestMapping("/v1/users/{externalId}/dashboard")
 @RequiredArgsConstructor
 public class DashboardController {
     private final DashboardService dashboardService;
 
     @GetMapping
     public CombinedDashboardDto getDashboard(
-            @PathVariable String userId,
+            @PathVariable String externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
             @RequestParam(defaultValue = "DAY") Bucket bucket) {
-        return dashboardService.getAggregatedData(userId, from, to, bucket);
+        return dashboardService.getAggregatedData(externalId, from, to, bucket);
     }
 }

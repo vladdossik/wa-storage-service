@@ -23,40 +23,40 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/users/{userId}/activities")
+@RequestMapping("/v1/users/{externalId}/activities")
 @RequiredArgsConstructor
 public class UserActivityController {
     private final UserActivityService userActivityService;
 
     @PostMapping
     public UserActivityResponseDto createActivity(
-            @PathVariable String userId,
+            @PathVariable String externalId,
             @Valid @RequestBody UserActivityCreateDto activityDto) {
-        return userActivityService.createUserActivity(userId, activityDto);
+        return userActivityService.createUserActivity(externalId, activityDto);
     }
 
     @GetMapping
     public List<UserActivityResponseDto> getActivities(
-            @PathVariable String userId,
+            @PathVariable String externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to) {
-        return userActivityService.getActivities(userId, from, to);
+        return userActivityService.getActivities(externalId, from, to);
     }
 
     @GetMapping("/aggregated")
     public List<AggregatedActivityDto> getAggregatedActivities(
-            @PathVariable String userId,
+            @PathVariable String externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
             @RequestParam(defaultValue = "DAY") Bucket bucket) {
-        return userActivityService.getAggregatedActivities(userId, from, to, bucket);
+        return userActivityService.getAggregatedActivities(externalId, from, to, bucket);
     }
 
     @DeleteMapping("/{activityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteActivity(
-            @PathVariable String userId,
+            @PathVariable String externalId,
             @PathVariable Long activityId) {
-        userActivityService.deleteUserActivity(userId, activityId);
+        userActivityService.deleteUserActivity(externalId, activityId);
     }
 }

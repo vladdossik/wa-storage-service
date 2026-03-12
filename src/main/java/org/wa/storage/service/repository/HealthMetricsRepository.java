@@ -13,10 +13,10 @@ import java.util.List;
 
 @Repository
 public interface HealthMetricsRepository extends JpaRepository<HealthMetric, CustomPrimaryKey> {
-    boolean existsByUserIdAndTimestamp(String userId, OffsetDateTime timestamp);
+    boolean existsByExternalIdAndTimestamp(String externalId, OffsetDateTime timestamp);
 
-    List<HealthMetric> findByUserIdAndTimestampBetweenOrderByTimestampAsc(
-            String userId, OffsetDateTime start, OffsetDateTime end);
+    List<HealthMetric> findByExternalIdAndTimestampBetweenOrderByTimestampAsc(
+            String externalId, OffsetDateTime start, OffsetDateTime end);
 
     @Query(value = """
             SELECT time_bucket(CAST(:bucket AS INTERVAL), timestamp) AS bucket,
@@ -26,13 +26,13 @@ public interface HealthMetricsRepository extends JpaRepository<HealthMetric, Cus
                    MAX(steps) AS max_steps,
                    AVG(sleep_hours) AS avg_sleep
             FROM health_metrics
-            WHERE user_id = :userId
+            WHERE external_id = :externalId
               AND timestamp BETWEEN :start AND :end
             GROUP BY bucket
             ORDER BY bucket
             """, nativeQuery = true)
     List<AggregatedMetricProjection> findAggregatedMetricsNative(
-            @Param("userId") String userId,
+            @Param("externalId") String externalId,
             @Param("start") OffsetDateTime start,
             @Param("end") OffsetDateTime end,
             @Param("bucket") String bucket
