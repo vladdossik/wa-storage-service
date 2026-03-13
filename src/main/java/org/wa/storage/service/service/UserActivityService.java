@@ -7,14 +7,15 @@ import org.wa.storage.service.enumeration.Bucket;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface UserActivityService {
-    UserActivityResponseDto createUserActivity(String externalId, UserActivityCreateDto dto);
+    UserActivityResponseDto createUserActivity(UUID externalId, UserActivityCreateDto dto);
 
-    List<UserActivityResponseDto> getActivities(String externalId, OffsetDateTime from, OffsetDateTime to);
+    List<UserActivityResponseDto> getActivities(UUID externalId, OffsetDateTime from, OffsetDateTime to);
 
-    List<AggregatedActivityDto> getAggregatedActivities(String externalId, OffsetDateTime from, OffsetDateTime to,
+    List<AggregatedActivityDto> getAggregatedActivities(UUID externalId, OffsetDateTime from, OffsetDateTime to,
                                                         Bucket bucket);
 
-    void deleteUserActivity(String externalId, Long activityId);
+    void deleteUserActivity(UUID externalId, Long activityId);
 }

@@ -20,6 +20,7 @@ import org.wa.storage.service.util.EventUnitConverter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -33,7 +34,7 @@ public class UserActivityServiceImpl implements UserActivityService {
 
     @Override
     @Transactional
-    public UserActivityResponseDto createUserActivity(String externalId, UserActivityCreateDto dto) {
+    public UserActivityResponseDto createUserActivity(UUID externalId, UserActivityCreateDto dto) {
         EventType eventType = EventType.valueOf(dto.getEventType());
 
         Integer quantity = null;
@@ -51,7 +52,7 @@ public class UserActivityServiceImpl implements UserActivityService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserActivityResponseDto> getActivities(String externalId, OffsetDateTime from, OffsetDateTime to) {
+    public List<UserActivityResponseDto> getActivities(UUID externalId, OffsetDateTime from, OffsetDateTime to) {
         return activitiesRepository.findByExternalIdAndTimestampBetweenOrderByTimestampAsc(externalId, from, to)
                 .stream().map(activityMapper::toDto).toList();
     }
@@ -59,7 +60,7 @@ public class UserActivityServiceImpl implements UserActivityService {
     @Override
     @Transactional(readOnly = true)
     public List<AggregatedActivityDto> getAggregatedActivities(
-            String externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
+            UUID externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
         List<AggregatedActivityProjection> results = activitiesRepository.findAggregatedActivitiesNative(
                 externalId, from, to, bucket.getValue());
         return aggregatedActivityMapper.toDtoList(results);
@@ -67,7 +68,7 @@ public class UserActivityServiceImpl implements UserActivityService {
 
     @Override
     @Transactional
-    public void deleteUserActivity(String externalId, Long activityId) {
+    public void deleteUserActivity(UUID externalId, Long activityId) {
         int deleted = activitiesRepository.deleteByIdAndExternalId(activityId, externalId);
         if (deleted == 0) {
             throw new ActivityNotFoundException("Запись не найдена или не пренадлежит пользователю");

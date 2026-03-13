@@ -11,15 +11,16 @@ import org.wa.storage.service.model.UserActivity;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface UserActivitiesRepository extends JpaRepository<UserActivity, CustomPrimaryKey> {
     List<UserActivity> findByExternalIdAndTimestampBetweenOrderByTimestampAsc(
-            String externalId, OffsetDateTime start, OffsetDateTime end);
+            UUID externalId, OffsetDateTime start, OffsetDateTime end);
 
     @Modifying
     @Query("DELETE FROM UserActivity u WHERE u.id = :id AND u.externalId = :externalId")
-    int deleteByIdAndExternalId(@Param("id") Long id, @Param("externalId") String externalId);
+    int deleteByIdAndExternalId(@Param("id") Long id, @Param("externalId") UUID externalId);
 
     @Query(value = """
             SELECT
@@ -36,7 +37,7 @@ public interface UserActivitiesRepository extends JpaRepository<UserActivity, Cu
             ORDER BY bucket, event_type
             """, nativeQuery = true)
     List<AggregatedActivityProjection> findAggregatedActivitiesNative(
-            @Param("externalId") String externalId,
+            @Param("externalId") UUID externalId,
             @Param("start") OffsetDateTime start,
             @Param("end") OffsetDateTime end,
             @Param("bucket") String bucket

@@ -12,6 +12,7 @@ import org.wa.storage.service.enumeration.Bucket;
 import org.wa.storage.service.service.DashboardService;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/users/{externalId}/dashboard")
@@ -21,7 +22,7 @@ public class DashboardController {
 
     @GetMapping
     public CombinedDashboardDto getDashboard(
-            @PathVariable String externalId,
+            @PathVariable UUID externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
             @RequestParam(defaultValue = "DAY") Bucket bucket) {

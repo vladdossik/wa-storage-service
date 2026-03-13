@@ -14,6 +14,7 @@ import org.wa.storage.service.service.UserActivityService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional
-    public CombinedDashboardDto getAggregatedData(String externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
+    public CombinedDashboardDto getAggregatedData(UUID externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
         List<AggregatedMetricDto> metrics = healthMetricsService.getAggregatedMetrics(externalId, from, to, bucket);
         List<AggregatedActivityDto> activities = userActivityService.getAggregatedActivities(externalId, from, to, bucket);
         return dashboardMapper.toDto(metrics, activities);

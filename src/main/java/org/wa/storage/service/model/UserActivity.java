@@ -19,6 +19,7 @@ import org.wa.storage.service.enumeration.EventType;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -33,7 +34,7 @@ public class UserActivity {
     private Long id;
 
     @Column(name = "external_id", nullable = false)
-    private String externalId;
+    private UUID externalId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "event_type", nullable = false)

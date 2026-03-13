@@ -4,11 +4,12 @@ import lombok.Data;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 public class HealthMetricResponseDto {
     private Long id;
-    private String externalId;
+    private UUID externalId;
     private OffsetDateTime timestamp;
     private Integer heartRate;
     private Integer steps;

@@ -17,6 +17,7 @@ import org.wa.storage.service.service.HealthMetricsService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -40,7 +41,7 @@ public class HealthMetricsServiceImpl implements HealthMetricsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<HealthMetricResponseDto> getMetrics(String externalId, OffsetDateTime from, OffsetDateTime to) {
+    public List<HealthMetricResponseDto> getMetrics(UUID externalId, OffsetDateTime from, OffsetDateTime to) {
         return metricsRepository.findByExternalIdAndTimestampBetweenOrderByTimestampAsc(externalId, from, to)
                 .stream()
                 .map(metricMapper::toResponseDto)
@@ -50,7 +51,7 @@ public class HealthMetricsServiceImpl implements HealthMetricsService {
     @Override
     @Transactional(readOnly = true)
     public List<AggregatedMetricDto> getAggregatedMetrics(
-            String externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
+            UUID externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
         List<AggregatedMetricProjection> results = metricsRepository
                 .findAggregatedMetricsNative(externalId, from, to, bucket.getValue());
         return aggregatedMetricMapper.toDtoList(results);

@@ -21,6 +21,7 @@ import org.wa.storage.service.service.UserActivityService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/users/{externalId}/activities")
@@ -30,14 +31,14 @@ public class UserActivityController {
 
     @PostMapping
     public UserActivityResponseDto createActivity(
-            @PathVariable String externalId,
+            @PathVariable UUID externalId,
             @Valid @RequestBody UserActivityCreateDto activityDto) {
         return userActivityService.createUserActivity(externalId, activityDto);
     }
 
     @GetMapping
     public List<UserActivityResponseDto> getActivities(
-            @PathVariable String externalId,
+            @PathVariable UUID externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to) {
         return userActivityService.getActivities(externalId, from, to);
@@ -45,7 +46,7 @@ public class UserActivityController {
 
     @GetMapping("/aggregated")
     public List<AggregatedActivityDto> getAggregatedActivities(
-            @PathVariable String externalId,
+            @PathVariable UUID externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
             @RequestParam(defaultValue = "DAY") Bucket bucket) {
@@ -55,7 +56,7 @@ public class UserActivityController {
     @DeleteMapping("/{activityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteActivity(
-            @PathVariable String externalId,
+            @PathVariable UUID externalId,
             @PathVariable Long activityId) {
         userActivityService.deleteUserActivity(externalId, activityId);
     }

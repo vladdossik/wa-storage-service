@@ -7,9 +7,10 @@ import org.wa.storage.service.enumeration.Bucket;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface HealthMetricsService {
     void saveMetricFromDto(HealthMetricDto metricDto);
-    List<HealthMetricResponseDto> getMetrics(String externalId, OffsetDateTime from, OffsetDateTime to);
-    List<AggregatedMetricDto> getAggregatedMetrics(String externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket);
+    List<HealthMetricResponseDto> getMetrics(UUID externalId, OffsetDateTime from, OffsetDateTime to);
+    List<AggregatedMetricDto> getAggregatedMetrics(UUID externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket);
 }

@@ -10,13 +10,14 @@ import org.wa.storage.service.model.CustomPrimaryKey;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface HealthMetricsRepository extends JpaRepository<HealthMetric, CustomPrimaryKey> {
-    boolean existsByExternalIdAndTimestamp(String externalId, OffsetDateTime timestamp);
+    boolean existsByExternalIdAndTimestamp(UUID externalId, OffsetDateTime timestamp);
 
     List<HealthMetric> findByExternalIdAndTimestampBetweenOrderByTimestampAsc(
-            String externalId, OffsetDateTime start, OffsetDateTime end);
+            UUID externalId, OffsetDateTime start, OffsetDateTime end);
 
     @Query(value = """
             SELECT time_bucket(CAST(:bucket AS INTERVAL), timestamp) AS bucket,
@@ -32,7 +33,7 @@ public interface HealthMetricsRepository extends JpaRepository<HealthMetric, Cus
             ORDER BY bucket
             """, nativeQuery = true)
     List<AggregatedMetricProjection> findAggregatedMetricsNative(
-            @Param("externalId") String externalId,
+            @Param("externalId") UUID externalId,
             @Param("start") OffsetDateTime start,
             @Param("end") OffsetDateTime end,
             @Param("bucket") String bucket

@@ -14,6 +14,7 @@ import org.wa.storage.service.service.HealthMetricsService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/users/{externalId}/metrics")
@@ -23,7 +24,7 @@ public class HealthMetricsController {
 
     @GetMapping
     public List<HealthMetricResponseDto> getMetrics(
-            @PathVariable String externalId,
+            @PathVariable UUID externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to) {
         return metricsService.getMetrics(externalId, from, to);
@@ -31,7 +32,7 @@ public class HealthMetricsController {
 
     @GetMapping("/aggregated")
     public List<AggregatedMetricDto> getAggregatedMetrics(
-            @PathVariable String externalId,
+            @PathVariable UUID externalId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to,
             @RequestParam(defaultValue = "DAY") Bucket bucket) {

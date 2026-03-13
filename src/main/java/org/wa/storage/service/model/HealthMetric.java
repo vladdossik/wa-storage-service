@@ -16,6 +16,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -31,7 +32,7 @@ public class HealthMetric {
     private Long id;
 
     @Column(name = "external_id", nullable = false)
-    private String externalId;
+    private UUID externalId;
 
     @Id
     @Column(name = "timestamp", nullable = false)
