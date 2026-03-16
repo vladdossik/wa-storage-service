@@ -1,0 +1,53 @@
+package org.wa.storage.service.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "health_metrics")
+@IdClass(CustomPrimaryKey.class)
+public class HealthMetric {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "health_metrics_id_seq")
+    @SequenceGenerator(name = "health_metrics_id_seq", sequenceName = "health_metrics_id_seq", allocationSize = 1)
+    private Long id;
+
+    @Column(name = "external_id", nullable = false)
+    private UUID externalId;
+
+    @Id
+    @Column(name = "timestamp", nullable = false)
+    private OffsetDateTime timestamp;
+
+    @Column(name = "heart_rate")
+    private Integer heartRate;
+
+    @Column(name = "steps")
+    private Integer steps;
+
+    @Column(name = "sleep_hours")
+    private Double sleepHours;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "metadata", columnDefinition = "jsonb")
+    private Map<String, Object> metadata;
+}

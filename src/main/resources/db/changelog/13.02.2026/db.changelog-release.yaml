@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/13.02.2026/001_create_timescaledb_extension.yaml
+  - include:
+      file: db/changelog/13.02.2026/002_create_sequences.yaml
+  - include:
+      file: db/changelog/13.02.2026/003_create_health_metrics_table.yaml
+  - include:
+      file: db/changelog/13.02.2026/004_convert_to_hypertable.yaml
+  - include:
+      file: db/changelog/13.02.2026/005_create_health_metrics_indexes.yaml
+  - include:
+      file: db/changelog/13.02.2026/006_create_user_activities_table.yaml
+  - include:
+      file: db/changelog/13.02.2026/007_convert_user_activities_hypertable.yaml
+  - include:
+      file: db/changelog/13.02.2026/008_create_user_activities_indexes.yaml

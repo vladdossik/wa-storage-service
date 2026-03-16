@@ -1,0 +1,59 @@
+package org.wa.storage.service.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.wa.storage.service.dto.AggregatedMetricDto;
+import org.wa.storage.service.dto.AggregatedMetricProjection;
+import org.wa.storage.service.dto.HealthMetricDto;
+import org.wa.storage.service.dto.HealthMetricResponseDto;
+import org.wa.storage.service.enumeration.Bucket;
+import org.wa.storage.service.mapper.AggregatedMetricMapper;
+import org.wa.storage.service.mapper.HealthMetricMapper;
+import org.wa.storage.service.model.HealthMetric;
+import org.wa.storage.service.repository.HealthMetricsRepository;
+import org.wa.storage.service.service.HealthMetricsService;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class HealthMetricsServiceImpl implements HealthMetricsService {
+
+    private final HealthMetricsRepository metricsRepository;
+    private final HealthMetricMapper metricMapper;
+    private final AggregatedMetricMapper aggregatedMetricMapper;
+
+    @Override
+    @Transactional
+    public void saveMetricFromDto(HealthMetricDto dto) {
+        if (metricsRepository.existsByExternalIdAndTimestamp(dto.getExternalId(), dto.getTimestamp())) {
+            log.warn("Метрика уже существует: externalId={}, timestamp={}", dto.getExternalId(), dto.getTimestamp());
+            return;
+        }
+        HealthMetric metric = metricMapper.toEntity(dto);
+        metricsRepository.save(metric);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HealthMetricResponseDto> getMetrics(UUID externalId, OffsetDateTime from, OffsetDateTime to) {
+        return metricsRepository.findByExternalIdAndTimestampBetweenOrderByTimestampAsc(externalId, from, to)
+                .stream()
+                .map(metricMapper::toResponseDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AggregatedMetricDto> getAggregatedMetrics(
+            UUID externalId, OffsetDateTime from, OffsetDateTime to, Bucket bucket) {
+        List<AggregatedMetricProjection> results = metricsRepository
+                .findAggregatedMetricsNative(externalId, from, to, bucket.getValue());
+        return aggregatedMetricMapper.toDtoList(results);
+    }
+}
