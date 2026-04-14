@@ -1,0 +1,1 @@
+CREATE SCHEMA IF NOT EXISTS wa_storage_service_db;

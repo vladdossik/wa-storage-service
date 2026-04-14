@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  storage-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: storage-service
+    ports:
+      - "8085:8085"
+    environment:
+      DB_URL: ${DB_URL:-jdbc:postgresql://wa-timescaledb:5432/wa_storage_service}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      SPRING_LIQUIBASE_DEFAULT_SCHEMA: wa_storage_service_db
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-wa-kafka:9092}
+      KAFKA_RETRY_INTERVAL_MS: ${KAFKA_RETRY_INTERVAL_MS:-1000}
+      KAFKA_MAX_RETRIES: ${KAFKA_MAX_RETRIES:-3}
+      JWT_SECRET_ACCESS: ${JWT_SECRET_ACCESS:-Y5ncOVqSI/HnJisBxE0TDsk/3cMP/FbwMDL+elybXkqsmpjNIqbjwCCOM8wTznVkqxeYZqf+ppsr4wzHNt8peA==}
+      REDIS_HOST: ${REDIS_HOST:-wa-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_TIMEOUT: ${REDIS_TIMEOUT:-5s}
+    networks:
+      - wa-local-network
+    restart: unless-stopped
+
+networks:
+  wa-local-network:
+    external: true
