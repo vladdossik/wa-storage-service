@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/wa_storage_service
+    url: jdbc:postgresql://localhost:5432/wa_storage_service
     username: postgres
-    password: postgres
+    password: 4589
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: localhost:9092
     consumer:
-      bootstrap-servers: localhost:29092
+      bootstrap-servers: localhost:9092
   jpa:
     properties:
       show-sql: true
@@ -15,4 +15,8 @@ health:
   kafka:
     retry-interval-ms: 1000
     max-retries: 3
+
+jwt:
+  secret:
+    access: ${JWT_SECRET_ACCESS:Y5ncOVqSI/HnJisBxE0TDsk/3cMP/FbwMDL+elybXkqsmpjNIqbjwCCOM8wTznVkqxeYZqf+ppsr4wzHNt8peA==}
 
